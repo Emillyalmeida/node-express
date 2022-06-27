@@ -17,7 +17,7 @@ const saveUsers = (users) =>
 
 const userRouters = (app) => {
   app
-    .route("/users")
+    .route("/users/:id")
     .get((req, res) => {
       const users = getUsers();
       res.send({ users });
@@ -29,6 +29,22 @@ const userRouters = (app) => {
       saveUsers(users);
 
       res.status(201).send("usuario criado com sucesso");
+    })
+    .put((req, res) => {
+      const users = getUsers();
+
+      saveUsers(
+        users.map((user) => {
+          if (user.id == req.params.id) {
+            return {
+              ...user,
+              ...req.body,
+            };
+          }
+          return user;
+        })
+      );
+      res.status(201).send("o usuario foi atualizado");
     });
 };
 
