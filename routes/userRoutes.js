@@ -45,6 +45,18 @@ const userRouters = (app) => {
         })
       );
       res.status(201).send("o usuario foi atualizado");
+    })
+    .delete((req, res) => {
+      const users = getUsers();
+
+      const IsExistUser = users.some((user) => user.id == req.params.id);
+
+      if (!IsExistUser) {
+        return res.status(404).send("o usuario não existe");
+      }
+
+      saveUsers(users.filter((user) => user.id != req.params.id));
+      res.status(201).send("o usuario foi deletado");
     });
 };
 
